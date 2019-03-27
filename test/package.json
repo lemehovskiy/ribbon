@@ -2,7 +2,7 @@
     "name": "ribbon_test",
     "version": "0.1.0",
     "description": "Ribbon",
-    "main": "build\/ribbon.js",
+    "main": "build/ribbon.js",
     "dependencies": {
         "jquery": "^3.2.1"
     },
@@ -29,7 +29,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https:\/\/github.com\/lemehovskiy\/ribbon"
+        "url": "https://github.com/lemehovskiy/ribbon"
     },
     "author": "lemehovskiy",
     "license": "ISC"
