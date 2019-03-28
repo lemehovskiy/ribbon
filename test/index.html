@@ -9,7 +9,6 @@
     <meta name="keywords" content="ribbon">
 
     <link rel="stylesheet" href="build/style.css">
-    <!--<script src="build/app.js"></script>-->
 
 </head>
 
@@ -18,92 +17,7 @@
 <canvas id="canvas"></canvas>
 
 
-<script>
 
-
-    function getRandom(int) {
-        return Math.floor(Math.random() * int)
-    }
-
-    var canvas = document.getElementById('canvas');
-    var ctx = canvas.getContext('2d');
-    var imageObj = new Image();
-    var iconUrls = [
-        './ribbon-icons/ribbon-icon-1.png',
-        './ribbon-icons/ribbon-icon-2.png',
-        './ribbon-icons/ribbon-icon-3.png',
-        './ribbon-icons/ribbon-icon-4.png',
-        './ribbon-icons/ribbon-icon-5.png',
-        './ribbon-icons/ribbon-icon-6.png',
-        './ribbon-icons/ribbon-icon-7.png',
-        './ribbon-icons/ribbon-icon-8.png',
-        './ribbon-icons/ribbon-icon-9.png'
-    ];
-    let grid = [];
-
-    let imgWidth = 0;
-    let imgHeight = 0;
-
-    imageObj.onload = function () {
-        imgWidth = imageObj.width / 1.5;
-        imgHeight = imageObj.height / 1.5;
-        ctx.canvas.width = imgWidth;
-        ctx.canvas.height = imgHeight;
-        ctx.drawImage(imageObj, 0, 0, imgWidth, imgHeight);
-
-        let step = 6;
-
-        for (let x = 0; x < imgWidth; x += step) {
-            for (let y = 0; y < imgHeight; y += step) {
-//                console.log('X - ' + x + '  Y - ' + y);
-//                console.log(total++);
-//                console.log(y);
-
-                if (ctx.getImageData(x, y, 1, 1).data[0] !== 0) {
-                    grid.push([x, y])
-                }
-            }
-        }
-
-
-        onLoadImages(iconUrls, function(images){
-            grid.forEach(function(item){
-//                console.log(Math.floor(Math.random() * images.length));
-                ctx.drawImage(images[getRandom(images.length)], item[0] - step / 2, item[1] - step / 2, step, step);
-            })
-        })
-
-
-        console.log(grid.length);
-
-
-    };
-
-    imageObj.src = './ribbon.png';
-
-
-
-    function onLoadImages(imageURLs, callback) {
-        let imagesOkCounter = 0;
-        let images = [];
-
-        for (var i = 0; i < imageURLs.length; i++) {
-            var img = new Image();
-            images.push(img);
-
-            img.onload = function () {
-                imagesOkCounter++;
-                if (imagesOkCounter >= imageURLs.length) {
-                    callback(images);
-                }
-            };
-
-            img.src = imageURLs[i];
-        }
-    }
-
-</script>
-
-
+<script src="build/app.js"></script>
 </body>
 </html>

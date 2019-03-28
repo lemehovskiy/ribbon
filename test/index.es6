@@ -1,12 +1,3 @@
-require("./sass/style.scss");
+import Ribbon from './../dist/ribbon';
 
-require ("jquery");
-
-require('../build/ribbon.js');
-
-
-$(document).ready(function () {
-
-    $('.ribbon-demo').ribbon();
-
-});
+let ribbon = new Ribbon();
