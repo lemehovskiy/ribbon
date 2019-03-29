@@ -50,7 +50,10 @@ export const getRandom = (int) => {
     return Math.floor(Math.random() * int)
 }
 
-export const generateGrid = (imageUrl, ctx, gridCellSize) => {
+export const generateGrid = (imageUrl, gridCellSize) => {
+    let canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
     return new Promise(function (resolve, reject) {
         let imgWidth = 0,
             imgHeight = 0,
