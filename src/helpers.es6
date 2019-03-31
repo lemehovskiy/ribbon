@@ -50,19 +50,21 @@ export const getRandom = (int) => {
     return Math.floor(Math.random() * int)
 }
 
-export const generateGrid = (imageUrl, gridCellSize) => {
+export const generateGrid = (imageUrl, gridCellSizePercent) => {
     let canvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d');
 
     return new Promise(function (resolve, reject) {
         let imgWidth = 0,
             imgHeight = 0,
+            gridCellSize = 0,
             grid = [];
 
         loadImage(imageUrl).then(
             image => {
-                imgWidth = image.width / 1.5;
-                imgHeight = image.height / 1.5;
+                imgWidth = image.width;
+                imgHeight = image.height;
+                gridCellSize = imgWidth / 100 * gridCellSizePercent;
                 ctx.canvas.width = imgWidth;
                 ctx.canvas.height = imgHeight;
                 ctx.drawImage(image, 0, 0, imgWidth, imgHeight);
@@ -71,7 +73,7 @@ export const generateGrid = (imageUrl, gridCellSize) => {
                     for (let y = 0; y < imgHeight; y += gridCellSize) {
                         if (ctx.getImageData(x, y, 1, 1).data[0] !== 0) {
                             grid.push(
-                                {x: x, y: y}
+                                {x: x / imgWidth * 100, y: y / imgHeight * 100}
                             )
                         }
                     }
@@ -81,4 +83,22 @@ export const generateGrid = (imageUrl, gridCellSize) => {
             }
         )
     })
+}
+
+export const fitSpriteToSize = (sprite, toWidth, toHeight) => {
+    const spriteWidth = sprite.width,
+        spriteHeight = sprite.height;
+
+    const heightCoef = spriteHeight / toHeight;
+    const widthCoef = spriteWidth / toWidth;
+
+    if (heightCoef > widthCoef) {
+        sprite.width = spriteWidth / heightCoef;
+        sprite.height = toHeight;
+    }
+
+    else {
+        sprite.height = spriteWidth / heightCoef;
+        sprite.width = toWidth;
+    }
 }
