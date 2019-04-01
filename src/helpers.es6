@@ -32,17 +32,40 @@ export const loadImage = (imageUrl) => {
 
 export const initIconsCofig = (grid, iconUrls, gridCellSize) => {
     return new Promise(function (resolve, reject) {
-        loadImages(iconUrls).then(
-            response => {
-                resolve(grid.map(function (item) {
-                    return {
-                        x: item.x - gridCellSize / 2,
-                        y: item.y - gridCellSize / 2,
-                        image: response[getRandom(response.length)]
-                    }
-                }))
-            }
-        )
+
+        const loaderIcons = new PIXI.loaders.Loader()
+        let iconCounter = 1;
+
+        iconUrls.forEach(iconUrl => {
+            loaderIcons.add('icon' + iconCounter++, iconUrl);
+        })
+
+        loaderIcons.load((loader, resources) => {
+            resolve(grid.map(function (item) {
+
+                // console.log(randomProperty(resources));
+                // console.log();
+
+
+                return {
+                    x: item.x - gridCellSize / 2,
+                    y: item.y - gridCellSize / 2,
+                    image: new PIXI.Sprite(randomProperty(resources).texture)
+                }
+            }))
+        })
+
+        // loadImages(iconUrls).then(
+        //     response => {
+        //         resolve(grid.map(function (item) {
+        //             return {
+        //                 x: item.x - gridCellSize / 2,
+        //                 y: item.y - gridCellSize / 2,
+        //                 image: response[getRandom(response.length)]
+        //             }
+        //         }))
+        //     }
+        // )
     })
 }
 
@@ -102,3 +125,8 @@ export const fitSpriteToSize = (sprite, toWidth, toHeight) => {
         sprite.width = toWidth;
     }
 }
+
+const randomProperty = function (obj) {
+    var keys = Object.keys(obj)
+    return obj[keys[ keys.length * Math.random() << 0]];
+};

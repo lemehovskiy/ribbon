@@ -3,37 +3,38 @@ import {initIconsCofig, generateGrid, fitSpriteToSize} from "./helpers.es6";
 class Ribbon {
     constructor() {
         let self = this;
-        var app = new PIXI.Application(1000, 600, {backgroundColor : 0x1099bb});
+        var app = new PIXI.Application(1400, 1000, {backgroundColor : 0x1099bb});
         document.body.appendChild(app.view);
 
         const loader = new PIXI.loaders.Loader () // you can also create your own if you want
-
         const sprites = {};
 
-// Chainable `add` to enqueue a resource
-        loader.add('ribbon', './ribbon.png')
-            .add('icon1',  './ribbon-icons/ribbon-icon-1.png');
+        loader.add('ribbon', './ribbon.png');
+
+        
+        self.iconsUrl = [
+            './ribbon-icons/ribbon-icon-1.png',
+            './ribbon-icons/ribbon-icon-2.png',
+            './ribbon-icons/ribbon-icon-3.png',
+            './ribbon-icons/ribbon-icon-4.png',
+            './ribbon-icons/ribbon-icon-5.png',
+            './ribbon-icons/ribbon-icon-6.png'
+        ]
+        
 
         let container = new PIXI.Container();
 
         loader.load((loader, resources) => {
 
-            sprites.ribbon = new PIXI.Sprite(resources.ribbon.texture);
-            sprites.icon1 = new PIXI.Sprite(resources.icon1.texture);
+            // console.log(resources);
 
-            // console.log(sprites.ribbon.height = app.screen.height);
-            // console.log(sprites.ribbon.width = app.screen.width);
+            sprites.ribbon = new PIXI.Sprite(resources.ribbon.texture);
 
             fitSpriteToSize(sprites.ribbon, app.screen.width, app.screen.height)
-            fitSpriteToSize(sprites.icon1, 10, 10)
 
             container.addChild(sprites.ribbon);
-
-            container.addChild(sprites.icon1);
-
+            
             app.stage.addChild(container);
-
-            console.log(container.width);
 
             container.x = app.screen.width / 2;
             container.y = app.screen.height / 2;
@@ -41,8 +42,8 @@ class Ribbon {
             container.pivot.x = container.width / 2;
             container.pivot.y = container.height / 2;
 
-
-
+            self.state.gridPxInPercentX = container.width / 100;
+            self.state.gridPxInPercentY = container.height / 100;
         });
 
 
@@ -71,43 +72,51 @@ class Ribbon {
             // creates frame-independent transformation
             // container.rotation += 0.1 * delta;
         });
-        
+
 
         self.gridCellSize = 6;
 
-        // self.state = {
-        //     grid: [],
-        //     icons: []
-        // }
-        //
-        // self.iconUrls = [
-        //     './ribbon-icons/ribbon-icon-1.png',
-        //     './ribbon-icons/ribbon-icon-2.png',
-        //     './ribbon-icons/ribbon-icon-3.png',
-        //     './ribbon-icons/ribbon-icon-4.png',
-        //     './ribbon-icons/ribbon-icon-5.png',
-        //     './ribbon-icons/ribbon-icon-6.png',
-        //     './ribbon-icons/ribbon-icon-7.png',
-        //     './ribbon-icons/ribbon-icon-8.png',
-        //     './ribbon-icons/ribbon-icon-9.png'
-        // ];
-        //
-        // self.ribbonImage = './ribbon.png';
+        self.state = {
+            grid: [],
+            gridPxInPercent: 0
+        }
+
 
 
         generateGrid('./ribbon.png', self.gridCellSize).then(
             response => {
                 self.state.grid = response;
 
-                console.log(response);
+                // console.log(response);
+                
+                initIconsCofig(self.state.grid, self.iconsUrl, self.gridCellSize)
+                    .then(response => {
+                        self.state.grid = response;
 
-                // initIconsCofig(self.state.grid, self.iconUrls, self.gridCellSize)
-                //     .then(response => {
-                //         self.state.icons = response;
-                //         self.state.icons.forEach(icon => {
-                //             self.ctx.drawImage(icon.image, icon.x, icon.y, self.gridCellSize, self.gridCellSize);
-                //         })
-                //     });
+                        // console.log(response[0].image.height);
+
+                        self.state.grid.forEach(item => {
+
+                            // console.log(item.image.height);
+
+
+                            fitSpriteToSize(item.image, self.state.gridPxInPercentX * self.gridCellSize, self.state.gridPxInPercentX * self.gridCellSize);
+                            //
+                            container.addChild(item.image);
+
+                            item.image.x = self.state.gridPxInPercentX * item.x;
+                            item.image.y = self.state.gridPxInPercentY * item.y;
+
+                            //
+                            // console.log(icon);
+                            //
+                            // container.addChild(sprites.ribbon);
+                            //
+                            // console.log(response);
+                            // self.ctx.drawImage(icon.image, icon.x, icon.y, self.gridCellSize, self.gridCellSize);
+                        })
+                    });
+                
             }
         )
     }
