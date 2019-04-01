@@ -30,6 +30,11 @@ export const loadImage = (imageUrl) => {
     })
 }
 
+export const compareRandom = (a, b) => {
+    return Math.random() - 0.5;
+}
+
+
 export const initIconsCofig = (grid, iconUrls, gridCellSize) => {
     return new Promise(function (resolve, reject) {
 
@@ -48,24 +53,12 @@ export const initIconsCofig = (grid, iconUrls, gridCellSize) => {
 
 
                 return {
-                    x: item.x - gridCellSize / 2,
-                    y: item.y - gridCellSize / 2,
+                    x: item.x,
+                    y: item.y,
                     image: new PIXI.Sprite(randomProperty(resources).texture)
                 }
             }))
         })
-
-        // loadImages(iconUrls).then(
-        //     response => {
-        //         resolve(grid.map(function (item) {
-        //             return {
-        //                 x: item.x - gridCellSize / 2,
-        //                 y: item.y - gridCellSize / 2,
-        //                 image: response[getRandom(response.length)]
-        //             }
-        //         }))
-        //     }
-        // )
     })
 }
 
